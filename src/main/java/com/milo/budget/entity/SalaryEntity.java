@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -29,5 +32,10 @@ public class SalaryEntity implements Serializable{
 	
 	@Column(name = "payment_day")
 	private Integer paymentDay;
+	
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "user_id")
+	private UserEntity user;
 	
 }

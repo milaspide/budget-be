@@ -74,14 +74,14 @@ public class UserService {
 	}
 
 	public void calculateRemainingBudget(Long id) {
-		AtomicReference<BigDecimal> currentFixedAmount = new AtomicReference<BigDecimal>(new BigDecimal(0));
+		AtomicReference<BigDecimal> currentFixedAmount = new AtomicReference<>(new BigDecimal(0));
 		List<FixedExpenseEntity> fixedExpenses = fixedExpenseRepo.findByUserUserId(id);
 		fixedExpenses.forEach(expense -> {
 			BigDecimal oldFixedAmount = currentFixedAmount.get();
 			if (currentFixedAmount.compareAndSet(oldFixedAmount, oldFixedAmount.add(expense.getExpenseAmount())))
 				return;
 		});
-		AtomicReference<BigDecimal> currentCasualAmount = new AtomicReference<BigDecimal>(new BigDecimal(0));
+		AtomicReference<BigDecimal> currentCasualAmount = new AtomicReference<>(new BigDecimal(0));
 		List<CasualExpenseEntity> casualExpenses = casualExpenseRepo.findByUserUserId(id);
 		casualExpenses.forEach(expense -> {
 			BigDecimal oldCasualAmount = currentCasualAmount.get();

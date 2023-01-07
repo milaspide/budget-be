@@ -12,9 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -66,14 +66,14 @@ public class UserEntity implements Serializable {
 	@Column(name = "remaining_budget")
 	private BigDecimal remainingBudget;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
 	SalaryEntity salary;
 	
 	@OneToMany(mappedBy = "user", targetEntity = CasualExpenseEntity.class)
-	List<CasualExpenseEntity> casualExpenses;
+	private List<CasualExpenseEntity> casualExpenses;
 	
 	@OneToMany(mappedBy = "user", targetEntity = FixedExpenseEntity.class)
-	List<FixedExpenseEntity> fixedExpenses;
+	private List<FixedExpenseEntity> fixedExpenses;
 
 }
