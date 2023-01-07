@@ -44,6 +44,7 @@ public class UserService {
 	}
 
 	public UserEntity newUser(UserEntity newUser) {
+		newUser.getSalary().setUser(newUser);
 		return userRepo.save(newUser);
 	}
 

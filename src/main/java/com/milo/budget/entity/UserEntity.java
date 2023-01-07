@@ -29,7 +29,7 @@ public class UserEntity implements Serializable {
 	private static final long serialVersionUID = -321885656958921997L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "USER_ID")
 	private Long userId;
 
@@ -68,7 +68,7 @@ public class UserEntity implements Serializable {
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
-	SalaryEntity salary;
+	private SalaryEntity salary;
 	
 	@OneToMany(mappedBy = "user", targetEntity = CasualExpenseEntity.class)
 	private List<CasualExpenseEntity> casualExpenses;

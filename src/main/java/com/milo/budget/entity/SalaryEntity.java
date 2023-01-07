@@ -20,6 +20,8 @@ import lombok.Setter;
 @Table(name = "salaries", schema = "budget")
 public class SalaryEntity implements Serializable{
 
+	private static final long serialVersionUID = 2791293590283439577L;
+
 	@Id
 	@Column(name = "user_id")
 	private Long id;
