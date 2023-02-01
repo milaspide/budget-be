@@ -1,9 +1,14 @@
 package com.milo.budget.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.milo.budget.dto.ExpenseDto;
 import com.milo.budget.entity.CasualExpenseEntity;
@@ -33,9 +38,34 @@ public class ExpenseService {
 	public List<FixedExpenseEntity> getFixedExpensesByUserId(Long userId) {
 		return fixedExpenseRepo.findByUserUserId(userId);
 	}
+	
+	public List<FixedExpenseEntity> getFixedExpensesByUserIdAndMonth(Long userId) {
+		LocalDate localNow = LocalDate.now();
+//		Date now = Date.from(localNow.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Calendar cal = Calendar.getInstance();
+		//Month value is 0-based. e.g., 0 for January
+		cal.set(localNow.getYear(), localNow.getMonthValue() - 1, 1);
+		Date startOfMonth = cal.getTime();
+		return fixedExpenseRepo.findAllByPaymentDateAfter(startOfMonth);
+	}
 
 	public List<CasualExpenseEntity> getCasualExpensesByUserId(Long userId) {
 		return casualExpenseRepo.findByUserUserId(userId);
+	}
+	
+	public List<CasualExpenseEntity> getCasualExpensesByUserIdAndMonth(Long userId, Long month) {
+		LocalDate localNow = LocalDate.now();
+		Calendar cal = Calendar.getInstance();
+		if(month == null) {
+			//Month value is 0-based. e.g., 0 for January
+			cal.set(localNow.getYear(), localNow.getMonthValue() - 1, 1);
+			Date startOfMonth = cal.getTime();
+			return casualExpenseRepo.findAllByUserIdAndPaymentDateAfter(userId, startOfMonth);
+		} else {
+			cal.set(localNow.getYear(), month.intValue() - 1, 1);
+			Date startOfMonth = cal.getTime();
+			return casualExpenseRepo.findAllByUserIdAndPaymentDateAfter(userId, startOfMonth);
+		}
 	}
 
 	public FixedExpenseEntity newFixedExpense(FixedExpenseEntity newExpense, Long userId) {

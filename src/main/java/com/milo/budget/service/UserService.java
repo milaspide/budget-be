@@ -89,15 +89,15 @@ public class UserService {
 			if (currentCasualAmount.compareAndSet(oldCasualAmount, oldCasualAmount.add(expense.getExpenseAmount())))
 				return;
 		});
-		UserEntity user = userRepo.findById(id).orElseThrow(() -> new SalaryNotFoundException(id));
-		BigDecimal netSalary = salaryRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id)).getNetSalary();
+		UserEntity user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+		BigDecimal netSalary = salaryRepo.findById(id).orElseThrow(() -> new SalaryNotFoundException(id)).getNetSalary();
 		BigDecimal remainingBudget = netSalary.subtract(currentFixedAmount.get()).subtract(currentCasualAmount.get());
 		user.setRemainingBudget(remainingBudget);
 		userRepo.save(user);
 	}
 
 	public void updateRemainingBudget(Long id, ExpenseDto expense) {
-		UserEntity user = userRepo.findById(id).orElseThrow(() -> new SalaryNotFoundException(id));
+		UserEntity user = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 		user.setRemainingBudget(user.getRemainingBudget().subtract(expense.getExpenseAmount()));
 		userRepo.save(user);
 	}

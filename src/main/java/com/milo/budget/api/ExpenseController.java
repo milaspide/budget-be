@@ -35,6 +35,12 @@ public class ExpenseController {
 				.ok(ObjectMapperUtils.mapAll(expenseService.getFixedExpensesByUserId(userId), ExpenseDto.class));
 	}
 
+	@GetMapping(value = "fixed/{userId}/month", produces = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<List<ExpenseDto>> getFixedExpensesByUserIdAndMonth(@PathVariable Long userId) {
+		return ResponseEntity.ok(
+				ObjectMapperUtils.mapAll(expenseService.getFixedExpensesByUserIdAndMonth(userId), ExpenseDto.class));
+	}
+
 	@GetMapping(value = "casual/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	ResponseEntity<List<ExpenseDto>> getCasualExpensesByUserId(@PathVariable Long userId) {
 		return ResponseEntity
@@ -55,11 +61,18 @@ public class ExpenseController {
 		FixedExpenseEntity newExpense = ObjectMapperUtils.map(expenseDto, FixedExpenseEntity.class);
 		expenseService.updateFixedExpense(newExpense, userId);
 	}
-	
+
 	@DeleteMapping(value = "fixed/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	void deleteFixedExpense(@PathVariable Long id) {
 		expenseService.deleteFixedExpense(id);
+	}
+
+	@GetMapping(value = "casual/{userId}/{month}", produces = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<List<ExpenseDto>> getCasualExpensesByUserIdAndMonth(@PathVariable Long userId,
+			@PathVariable(required = false) Long month) {
+		return ResponseEntity.ok(ObjectMapperUtils
+				.mapAll(expenseService.getCasualExpensesByUserIdAndMonth(userId, month), ExpenseDto.class));
 	}
 
 	@PostMapping(value = "casual/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -76,7 +89,7 @@ public class ExpenseController {
 		CasualExpenseEntity newExpense = ObjectMapperUtils.map(expenseDto, CasualExpenseEntity.class);
 		expenseService.updateCasualExpense(newExpense, userId);
 	}
-	
+
 	@DeleteMapping(value = "casual/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	void deleteCasualExpense(@PathVariable Long id) {
