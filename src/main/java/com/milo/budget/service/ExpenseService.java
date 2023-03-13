@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.milo.budget.dto.ExpenseDto;
@@ -52,7 +53,7 @@ public class ExpenseService {
 	public List<CasualExpenseEntity> getCasualExpensesByUserId(Long userId) {
 		return casualExpenseRepo.findByUserUserId(userId);
 	}
-	
+
 	public List<CasualExpenseEntity> getCasualExpensesByUserIdAndMonth(Long userId, Long month) {
 		LocalDate localNow = LocalDate.now();
 		Calendar cal = Calendar.getInstance();
@@ -79,6 +80,7 @@ public class ExpenseService {
 		updatedExpense.setUser(userRepo.findById(userId).orElseThrow(() -> new UserNotFoundException(userId)));
 		fixedExpenseRepo.findById(updatedExpense.getExpenseId()).map(expense -> {
 			ObjectMapperUtils.map(updatedExpense, expense);
+			expense.setUserId(userId);
 			return fixedExpenseRepo.save(expense);
 		}).orElseThrow(() -> new ExpenseNotFoundException(updatedExpense.getExpenseId()));
 	}
