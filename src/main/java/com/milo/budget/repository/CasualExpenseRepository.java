@@ -13,4 +13,6 @@ public interface CasualExpenseRepository extends JpaRepository<CasualExpenseEnti
 	
 	List<CasualExpenseEntity> findAllByUserIdAndPaymentDateAfter (Long userId, Date startOfMonth);
 
+	List<CasualExpenseEntity> findAllByUserIdAndPaymentDateBetween (Long userId, Date startOfMonth, Date endOfMonth);
+
 }

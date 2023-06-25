@@ -11,5 +11,7 @@ public interface FixedExpenseRepository extends JpaRepository<FixedExpenseEntity
 
 	List<FixedExpenseEntity> findByUserUserId(Long userId);
 	
-	List<FixedExpenseEntity> findAllByPaymentDateAfter (Date startOfMonth);
+	List<FixedExpenseEntity> findAllByUserIdAndPaymentDateAfter(Long userId, Date startOfMonth);
+
+	List<FixedExpenseEntity> findAllByUserIdAndPaymentDateBetween (Long userId, Date startOfMonth, Date endOfMonth);
 }

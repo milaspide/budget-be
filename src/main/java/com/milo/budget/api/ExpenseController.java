@@ -24,22 +24,9 @@ public class ExpenseController {
     @Autowired
     ExpenseService expenseService;
 
-    @GetMapping(value = "fixed/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<ExpenseDto>> getFixedExpensesByUserId(@PathVariable Long userId) {
-        return ResponseEntity
-                .ok(ObjectMapperUtils.mapAll(expenseService.getFixedExpensesByUserId(userId), ExpenseDto.class));
-    }
-
-    @GetMapping(value = "fixed/month/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<ExpenseDto>> getFixedExpensesByUserIdAndMonth(@PathVariable Long userId) {
-        return ResponseEntity.ok(
-                ObjectMapperUtils.mapAll(expenseService.getFixedExpensesByUserIdAndMonth(userId), ExpenseDto.class));
-    }
-
-    @GetMapping(value = "casual/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<ExpenseDto>> getCasualExpensesByUserId(@PathVariable Long userId) {
-        return ResponseEntity
-                .ok(ObjectMapperUtils.mapAll(expenseService.getCasualExpensesByUserId(userId), ExpenseDto.class));
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<ExpenseDto>> getExpenses(@RequestBody ExpenseDto params, @RequestParam(required = false) Long month) {
+        return ResponseEntity.ok(expenseService.getExpenses(params, month));
     }
 
     @PostMapping(value = "fixed/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -61,13 +48,6 @@ public class ExpenseController {
     @ResponseStatus(HttpStatus.OK)
     void deleteFixedExpense(@PathVariable Long id) {
         expenseService.deleteFixedExpense(id);
-    }
-
-    @GetMapping(value = "casual/month/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<ExpenseDto>> getCasualExpensesByUserIdAndMonth(@PathVariable Long userId,
-                                                                       @RequestParam(required = false) Long month) {
-        return ResponseEntity.ok(ObjectMapperUtils
-                .mapAll(expenseService.getCasualExpensesByUserIdAndMonth(userId, month), ExpenseDto.class));
     }
 
     @PostMapping(value = "casual/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -15,6 +15,8 @@ public class ExpenseDto implements Serializable{
 
 	private Long expenseId;
 
+	private Long userId;
+
 	private String expenseCategory;
 
 	private String expenseType;
@@ -24,4 +26,6 @@ public class ExpenseDto implements Serializable{
 	private BigDecimal expenseAmount;
 
 	private Date paymentDate;
+
+	private String type; // casual or fixed
 }
