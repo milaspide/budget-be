@@ -62,8 +62,8 @@ public class UserService {
 
 	public Long getRemainingDays(Long id) {
 		LocalDate localNow = LocalDate.now();
-		Integer year = localNow.getYear();
-		Integer month = localNow.getMonthValue();
+		int year = localNow.getYear();
+		int month = localNow.getMonthValue();
 		Integer day = salaryRepo.findById(id).orElseThrow(() -> new SalaryNotFoundException(id)).getPaymentDay();
 		Calendar cal = Calendar.getInstance();
 		//Month value is 0-based. e.g., 0 for January

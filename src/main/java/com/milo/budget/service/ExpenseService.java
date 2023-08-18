@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.milo.budget.exception.SystemBusinessLogicException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +34,12 @@ public class ExpenseService {
 	@Autowired
 	private UserService userService;
 
-	public List<ExpenseDto> getExpenses(ExpenseDto params, Long month) {
+	public List<ExpenseDto> getExpenses(Long userId, String type, Long month) {
 		Calendar cal = Calendar.getInstance();
 		LocalDate localNow = LocalDate.now();
 		Date startOfMonth;
 		Date endOfMonth;
-		if(month == null) {
+		if (month == null) {
 			//Month value is 0-based. e.g., 0 for January
 			cal.set(localNow.getYear(), localNow.getMonthValue() - 1, 1);
 			startOfMonth = cal.getTime();
@@ -50,14 +51,16 @@ public class ExpenseService {
 			cal.set(localNow.getYear(), month.intValue(), 1);
 			endOfMonth = cal.getTime();
 		}
-		if(params.getType().equals("CASUAL")) {
-			List<CasualExpenseEntity> expenses = casualExpenseRepo.findAllByUserIdAndPaymentDateBetween(params.getUserId(), startOfMonth, endOfMonth);
-			List<ExpenseDto> expensesDto = ObjectMapperUtils.mapAll(expenses, ExpenseDto.class);
-			return expensesDto;
+		if (type != null && type.equals("CASUAL")) {
+			List<CasualExpenseEntity> expenses =
+					casualExpenseRepo.findAllByUserIdAndPaymentDateBetween(userId, startOfMonth, endOfMonth);
+			return ObjectMapperUtils.mapAll(expenses, ExpenseDto.class);
+		} else if (type != null && type.equals("FIXED")) {
+			List<FixedExpenseEntity> expenses =
+					fixedExpenseRepo.findAllByUserIdAndPaymentDateBetween(userId, startOfMonth, endOfMonth);
+			return ObjectMapperUtils.mapAll(expenses, ExpenseDto.class);
 		} else {
-			List<FixedExpenseEntity> expenses = fixedExpenseRepo.findAllByUserIdAndPaymentDateBetween(params.getUserId(), startOfMonth, endOfMonth);
-			List<ExpenseDto> expensesDto = ObjectMapperUtils.mapAll(expenses, ExpenseDto.class);
-			return expensesDto;
+			throw new SystemBusinessLogicException("Parameter \"type\" must not be \"null\"");
 		}
 	}
 

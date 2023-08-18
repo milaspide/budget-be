@@ -2,7 +2,6 @@ package com.milo.budget.api;
 
 import java.util.List;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,7 +14,6 @@ import com.milo.budget.entity.FixedExpenseEntity;
 import com.milo.budget.service.ExpenseService;
 import com.milo.budget.utils.ObjectMapperUtils;
 
-@Log4j2
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(path = "/expenses")
@@ -25,8 +23,9 @@ public class ExpenseController {
     ExpenseService expenseService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<ExpenseDto>> getExpenses(@RequestBody ExpenseDto params, @RequestParam(required = false) Long month) {
-        return ResponseEntity.ok(expenseService.getExpenses(params, month));
+    ResponseEntity<List<ExpenseDto>> getExpenses(@RequestParam Long userId, @RequestParam String type,
+                                                 @RequestParam(required = false) Long month) {
+        return ResponseEntity.ok(expenseService.getExpenses(userId, type, month));
     }
 
     @PostMapping(value = "fixed/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)

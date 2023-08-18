@@ -10,8 +10,6 @@ import com.milo.budget.entity.CasualExpenseEntity;
 public interface CasualExpenseRepository extends JpaRepository<CasualExpenseEntity, Long> {
 
 	List<CasualExpenseEntity> findByUserUserId(Long userId);
-	
-	List<CasualExpenseEntity> findAllByUserIdAndPaymentDateAfter (Long userId, Date startOfMonth);
 
 	List<CasualExpenseEntity> findAllByUserIdAndPaymentDateBetween (Long userId, Date startOfMonth, Date endOfMonth);
 
